@@ -1,420 +1,1693 @@
-<div align="center">
-  <img src="resources/mmseg-logo.png" width="600"/>
-  <div>&nbsp;</div>
-  <div align="center">
-    <b><font size="5">OpenMMLab website</font></b>
-    <sup>
-      <a href="https://openmmlab.com">
-        <i><font size="4">HOT</font></i>
-      </a>
-    </sup>
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <b><font size="5">OpenMMLab platform</font></b>
-    <sup>
-      <a href="https://platform.openmmlab.com">
-        <i><font size="4">TRY IT OUT</font></i>
-      </a>
-    </sup>
-  </div>
-  <div>&nbsp;</div>
+# Проект модуля. Выбор и обучение модели из MMSegmentation для задачи мультиклассовой семантической сегментации
 
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mmsegmentation)](https://pypi.org/project/mmsegmentation/)
-[![PyPI](https://img.shields.io/pypi/v/mmsegmentation)](https://pypi.org/project/mmsegmentation)
-[![docs](https://img.shields.io/badge/docs-latest-blue)](https://mmsegmentation.readthedocs.io/en/latest/)
-[![badge](https://github.com/open-mmlab/mmsegmentation/workflows/build/badge.svg)](https://github.com/open-mmlab/mmsegmentation/actions)
-[![codecov](https://codecov.io/gh/open-mmlab/mmsegmentation/branch/master/graph/badge.svg)](https://codecov.io/gh/open-mmlab/mmsegmentation)
-[![license](https://img.shields.io/github/license/open-mmlab/mmsegmentation.svg)](https://github.com/open-mmlab/mmsegmentation/blob/main/LICENSE)
-[![issue resolution](https://isitmaintained.com/badge/resolution/open-mmlab/mmsegmentation.svg)](https://github.com/open-mmlab/mmsegmentation/issues)
-[![open issues](https://isitmaintained.com/badge/open/open-mmlab/mmsegmentation.svg)](https://github.com/open-mmlab/mmsegmentation/issues)
-[![Open in OpenXLab](https://cdn-static.openxlab.org.cn/app-center/openxlab_demo.svg)](https://openxlab.org.cn/apps?search=mmseg)
+**Репозиторий проекта:** https://github.com/nekitce/yandex-cv-sprint2-mmseg-cats-dogs
 
-Documentation: <https://mmsegmentation.readthedocs.io/en/latest/>
+## 1. Описание проекта
 
-English | [简体中文](README_zh-CN.md)
+Проект посвящён решению задачи **мультиклассовой семантической сегментации** изображений кошек и собак с использованием фреймворка **MMSegmentation**.
 
-</div>
+Основная задача проекта — пройти полный цикл разработки модели компьютерного зрения:
 
-<div align="center">
-  <a href="https://openmmlab.medium.com/" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/219255827-67c1a27f-f8c5-46a9-811d-5e57448c61d1.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://discord.gg/raweFPmdzG" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/218347213-c080267f-cbb6-443e-8532-8e1ed9a58ea9.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://twitter.com/OpenMMLab" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/218346637-d30c8a0f-3eba-4699-8131-512fb06d46db.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://www.youtube.com/openmmlab" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/218346691-ceb2116a-465a-40af-8424-9f30d2348ca9.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://space.bilibili.com/1293512903" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/219026751-d7d14cce-a7c9-4e82-9942-8375fca65b99.png" width="3%" alt="" /></a>
-  <img src="https://user-images.githubusercontent.com/25839884/218346358-56cc8e2f-a2b8-487f-9088-32480cceabcf.png" width="3%" alt="" />
-  <a href="https://www.zhihu.com/people/openmmlab" style="text-decoration:none;">
-    <img src="https://user-images.githubusercontent.com/25839884/219026120-ba71e48b-6e94-4bd4-b4e9-b7d175b5e362.png" width="3%" alt="" /></a>
-</div>
+1. исследовать и проверить качество исходного датасета;
+2. исправить ошибки в сегментационной разметке;
+3. подготовить данные для обучения в формате MMSegmentation;
+4. провести исследовательский анализ данных (**EDA**);
+5. сформировать стартовые гипотезы и baseline-модели;
+6. обучить несколько вариантов моделей;
+7. провести контролируемые эксперименты по улучшению качества;
+8. проанализировать динамику обучения и итоговые метрики;
+9. выбрать лучшую модель;
+10. провести независимую оценку на тестовой выборке;
+11. выполнить детальный анализ корректных и ошибочных предсказаний;
+12. зафиксировать результаты, структуру проекта и назначение собственного кода.
 
-## Introduction
+Целевая метрика проекта — **mDice**.
 
-MMSegmentation is an open source semantic segmentation toolbox based on PyTorch.
-It is a part of the OpenMMLab project.
+> **Целевой результат: mDice > 75% на тестовой выборке.**
 
-The [main](https://github.com/open-mmlab/mmsegmentation/tree/main) branch works with PyTorch 1.6+.
+В результате проведённых экспериментов лучший вариант модели достиг:
 
-### 🎉 Introducing MMSegmentation v1.0.0 🎉
+> **Test mDice = 82.17%**
 
-We are thrilled to announce the official release of MMSegmentation's latest version! For this new release, the [main](https://github.com/open-mmlab/mmsegmentation/tree/main) branch serves as the primary branch, while the development branch is [dev-1.x](https://github.com/open-mmlab/mmsegmentation/tree/dev-1.x). The stable branch for the previous release remains as the [0.x](https://github.com/open-mmlab/mmsegmentation/tree/0.x) branch. Please note that the [master](https://github.com/open-mmlab/mmsegmentation/tree/master) branch will only be maintained for a limited time before being removed. We encourage you to be mindful of branch selection and updates during use. Thank you for your unwavering support and enthusiasm, and let's work together to make MMSegmentation even more robust and powerful! 💪
+Таким образом, целевой показатель превышен на **7.17 процентного пункта**.
 
-MMSegmentation v1.x brings remarkable improvements over the 0.x release, offering a more flexible and feature-packed experience. To utilize the new features in v1.x, we kindly invite you to consult our detailed [📚 migration guide](https://mmsegmentation.readthedocs.io/en/latest/migration/interface.html), which will help you seamlessly transition your projects. Your support is invaluable, and we eagerly await your feedback!
+---
 
-![demo image](resources/seg_demo.gif)
+## 2. Постановка задачи
 
-### Major features
+Необходимо построить модель семантической сегментации, которая для каждого пикселя изображения определяет один из трёх классов:
 
-- **Unified Benchmark**
+|  ID | Класс        |
+| --: | ------------ |
+| `0` | `background` |
+| `1` | `cat`        |
+| `2` | `dog`        |
 
-  We provide a unified benchmark toolbox for various semantic segmentation methods.
+Модель должна одновременно определять принадлежность пикселей к объектам и восстанавливать их пространственные границы.
 
-- **Modular Design**
+В отличие от задачи классификации изображения или object detection, результатом работы модели является **полная сегментационная маска**, содержащая класс каждого пикселя.
 
-  We decompose the semantic segmentation framework into different components and one can easily construct a customized semantic segmentation framework by combining different modules.
+---
 
-- **Support of multiple methods out of box**
+## 3. Датасет
 
-  The toolbox directly supports popular and contemporary semantic segmentation frameworks, *e.g.* PSPNet, DeepLabV3, PSANet, DeepLabV3+, etc.
+Исходный датасет состоит из трёх выборок:
 
-- **High efficiency**
+| Выборка    | Количество изображений |
+| ---------- | ---------------------: |
+| Train      |                **199** |
+| Validation |                **120** |
+| Test       |                **120** |
+| **Всего**  |                **439** |
 
-  The training speed is faster than or comparable to other codebases.
+Первоначально обучающая выборка содержала 200 изображений. Один пример был удалён, поскольку являлся дубликатом другого изображения.
 
-## What's New
+Все изображения имеют одинаковый размер:
 
-v1.2.0 was released on 10/12/2023, from 1.1.0 to 1.2.0, we have added or updated the following features:
+* ширина — `256 px`;
+* высота — `256 px`;
+* aspect ratio — `1.0`.
 
-### Highlights
+Сегментационные маски представлены для каждого изображения.
 
-- Support for the open-vocabulary semantic segmentation algorithm [SAN](configs/san/README.md)
+---
 
-- Support monocular depth estimation task, please refer to [VPD](configs/vpd/README.md) and [Adabins](projects/Adabins/README.md) for more details.
+# Этап 0. Подготовка проекта
 
-  ![depth estimation](https://github.com/open-mmlab/mmsegmentation/assets/15952744/07afd0e9-8ace-4a00-aa1e-5bf0ca92dcbc)
+## 4. Организация работы
 
-- Add new projects: open-vocabulary semantic segmentation algorithm [CAT-Seg](projects/CAT-Seg/README.md), real-time semantic segmentation algofithm [PP-MobileSeg](projects/pp_mobileseg/README.md)
+Работа над проектом выполнялась последовательно:
 
-## Installation
+1. подготовка и проверка окружения;
+2. анализ качества исходных данных;
+3. исправление разметки;
+4. подготовка индексированных масок;
+5. EDA;
+6. baseline-эксперименты;
+7. эксперименты по улучшению;
+8. выбор лучшей модели;
+9. независимое тестирование;
+10. анализ ошибок;
+11. документирование проекта.
 
-Please refer to [get_started.md](docs/en/get_started.md#installation) for installation and [dataset_prepare.md](docs/en/user_guides/2_dataset_prepare.md#prepare-datasets) for dataset preparation.
+Вся исследовательская часть проекта зафиксирована в **Jupyter Notebook**.
 
-## Get Started
+Ноутбук используется не только как демонстрация отдельных фрагментов кода, а как **полный журнал выполнения проекта**. В нём последовательно зафиксированы:
 
-Please see [Overview](docs/en/overview.md) for the general introduction of MMSegmentation.
+* подготовка окружения;
+* обработка и проверка датасета;
+* исправление разметки;
+* EDA;
+* визуализации;
+* конфигурации моделей;
+* проверки Dataset и DataLoader;
+* проверки `forward`;
+* проверки GPU;
+* запуски обучения;
+* поиск checkpoint;
+* анализ логов;
+* построение графиков;
+* тестирование моделей;
+* сравнение экспериментов;
+* получение предсказаний;
+* анализ ошибок;
+* выбор лучшего эксперимента;
+* финальные выводы.
 
-Please see [user guides](https://mmsegmentation.readthedocs.io/en/latest/user_guides/index.html#) for the basic usage of MMSegmentation.
-There are also [advanced tutorials](https://mmsegmentation.readthedocs.io/en/latest/advanced_guides/index.html) for in-depth understanding of mmseg design and implementation .
+Таким образом, Notebook позволяет восстановить **полный ход экспериментов**, а не только получить финальную метрику.
 
-A Colab tutorial is also provided. You may preview the notebook [here](demo/MMSegmentation_Tutorial.ipynb) or directly [run](https://colab.research.google.com/github/open-mmlab/mmsegmentation/blob/main/demo/MMSegmentation_Tutorial.ipynb) on Colab.
+---
 
-To migrate from MMSegmentation 0.x, please refer to [migration](docs/en/migration).
+# Этап 1. Исследовательский анализ данных (EDA)
 
-## Tutorial
+## 5. Анализ качества данных
 
-<div align="center">
-  <b>MMSegmentation Tutorials</b>
-</div>
-<table align="center">
-  <tbody>
-    <tr align="center" valign="center">
-      <td>
-        <b>Get Started</b>
-      </td>
-      <td>
-        <b>MMSeg Basic Tutorial</b>
-      </td>
-      <td>
-        <b>MMSeg Detail Tutorial</b>
-      </td>
-      <td>
-        <b>MMSeg Development Tutorial</b>
-      </td>
-    </tr>
-    <tr valign="top">
-      <td>
-        <ul>
-          <li><a href="docs/en/overview.md">MMSeg overview</a></li>
-          <li><a href="docs/en/get_started.md">MMSeg Installation</a></li>
-          <li><a href="docs/en/notes/faq.md">FAQ</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="docs/en/user_guides/1_config.md">Tutorial 1: Learn about Configs</a></li>
-          <li><a href="docs/en/user_guides/2_dataset_prepare.md">Tutorial 2: Prepare datasets</a></li>
-          <li><a href="docs/en/user_guides/3_inference.md">Tutorial 3: Inference with existing models</a></li>
-          <li><a href="docs/en/user_guides/4_train_test.md">Tutorial 4: Train and test with existing models</a></li>
-          <li><a href="docs/en/user_guides/5_deployment.md">Tutorial 5: Model deployment</a></li>
-          <li><a href="docs/zh_cn/user_guides/deploy_jetson.md">Deploy mmsegmentation on Jetson platform</a></li>
-          <li><a href="docs/en/user_guides/useful_tools.md">Useful Tools</a></li>
-          <li><a href="docs/en/user_guides/visualization_feature_map.md">Feature Map Visualization</a></li>
-          <li><a href="docs/en/user_guides/visualization.md">Visualization</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="docs/en/advanced_guides/datasets.md">MMSeg Dataset</a></li>
-          <li><a href="docs/en/advanced_guides/models.md">MMSeg Models</a></li>
-          <li><a href="docs/en/advanced_guides/structures.md">MMSeg Dataset Structures</a></li>
-          <li><a href="docs/en/advanced_guides/transforms.md">MMSeg Data Transforms</a></li>
-          <li><a href="docs/en/advanced_guides/data_flow.md">MMSeg Dataflow</a></li>
-          <li><a href="docs/en/advanced_guides/engine.md">MMSeg Training Engine</a></li>
-          <li><a href="docs/en/advanced_guides/evaluation.md">MMSeg Evaluation</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="docs/en/advanced_guides/add_datasets.md">Add New Datasets</a></li>
-          <li><a href="docs/en/advanced_guides/add_metrics.md">Add New Metrics</a></li>
-          <li><a href="docs/en/advanced_guides/add_models.md">Add New Modules</a></li>
-          <li><a href="docs/en/advanced_guides/add_transforms.md">Add New Data Transforms</a></li>
-          <li><a href="docs/en/advanced_guides/customize_runtime.md">Customize Runtime Settings</a></li>
-          <li><a href="docs/en/advanced_guides/training_tricks.md">Training Tricks</a></li>
-          <li><a href=".github/CONTRIBUTING.md">Contribute code to MMSeg</a></li>
-          <li><a href="docs/zh_cn/advanced_guides/contribute_dataset.md">Contribute a standard dataset in projects</a></li>
-          <li><a href="docs/en/device/npu.md">NPU (HUAWEI Ascend)</a></li>
-          <li><a href="docs/en/migration/interface.md">0.x → 1.x migration</a></li>
-          <li><a href="docs/en/migration/package.md">0.x → 1.x package</a></li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
+Исходный датасет содержал ошибки в сегментационной разметке.
 
-## Benchmark and model zoo
+На первом этапе были проверены:
 
-Results and models are available in the [model zoo](docs/en/model_zoo.md).
+* соответствие изображений и масок;
+* наличие отсутствующих файлов;
+* возможность чтения изображений;
+* возможность чтения масок;
+* соответствие размеров изображения и маски;
+* уникальные значения пикселей масок;
+* соответствие масок реальным объектам;
+* корректность границ сегментации.
 
-<div align="center">
-  <b>Overview</b>
-</div>
-<table align="center">
-  <tbody>
-    <tr align="center" valign="center">
-      <td>
-        <b>Supported backbones</b>
-      </td>
-      <td>
-        <b>Supported methods</b>
-      </td>
-      <td>
-        <b>Supported Head</b>
-      </td>
-      <td>
-        <b>Supported datasets</b>
-      </td>
-      <td>
-        <b>Other</b>
-      </td>
-    </tr>
-    <tr valign="top">
-      <td>
-        <ul>
-        <li><a href="mmseg/models/backbones/resnet.py">ResNet(CVPR'2016)</a></li>
-        <li><a href="mmseg/models/backbones/resnext.py">ResNeXt (CVPR'2017)</a></li>
-        <li><a href="configs/hrnet">HRNet (CVPR'2019)</a></li>
-        <li><a href="configs/resnest">ResNeSt (ArXiv'2020)</a></li>
-        <li><a href="configs/mobilenet_v2">MobileNetV2 (CVPR'2018)</a></li>
-        <li><a href="configs/mobilenet_v3">MobileNetV3 (ICCV'2019)</a></li>
-        <li><a href="configs/vit">Vision Transformer (ICLR'2021)</a></li>
-        <li><a href="configs/swin">Swin Transformer (ICCV'2021)</a></li>
-        <li><a href="configs/twins">Twins (NeurIPS'2021)</a></li>
-        <li><a href="configs/beit">BEiT (ICLR'2022)</a></li>
-        <li><a href="configs/convnext">ConvNeXt (CVPR'2022)</a></li>
-        <li><a href="configs/mae">MAE (CVPR'2022)</a></li>
-        <li><a href="configs/poolformer">PoolFormer (CVPR'2022)</a></li>
-        <li><a href="configs/segnext">SegNeXt (NeurIPS'2022)</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="configs/san/">SAN (CVPR'2023)</a></li>
-          <li><a href="configs/vpd">VPD (ICCV'2023)</a></li>
-          <li><a href="configs/ddrnet">DDRNet (T-ITS'2022)</a></li>
-          <li><a href="configs/pidnet">PIDNet (ArXiv'2022)</a></li>
-          <li><a href="configs/mask2former">Mask2Former (CVPR'2022)</a></li>
-          <li><a href="configs/maskformer">MaskFormer (NeurIPS'2021)</a></li>
-          <li><a href="configs/knet">K-Net (NeurIPS'2021)</a></li>
-          <li><a href="configs/segformer">SegFormer (NeurIPS'2021)</a></li>
-          <li><a href="configs/segmenter">Segmenter (ICCV'2021)</a></li>
-          <li><a href="configs/dpt">DPT (ArXiv'2021)</a></li>
-          <li><a href="configs/setr">SETR (CVPR'2021)</a></li>
-          <li><a href="configs/stdc">STDC (CVPR'2021)</a></li>
-          <li><a href="configs/bisenetv2">BiSeNetV2 (IJCV'2021)</a></li>
-          <li><a href="configs/cgnet">CGNet (TIP'2020)</a></li>
-          <li><a href="configs/point_rend">PointRend (CVPR'2020)</a></li>
-          <li><a href="configs/dnlnet">DNLNet (ECCV'2020)</a></li>
-          <li><a href="configs/ocrnet">OCRNet (ECCV'2020)</a></li>
-          <li><a href="configs/isanet">ISANet (ArXiv'2019/IJCV'2021)</a></li>
-          <li><a href="configs/fastscnn">Fast-SCNN (ArXiv'2019)</a></li>
-          <li><a href="configs/fastfcn">FastFCN (ArXiv'2019)</a></li>
-          <li><a href="configs/gcnet">GCNet (ICCVW'2019/TPAMI'2020)</a></li>
-          <li><a href="configs/ann">ANN (ICCV'2019)</a></li>
-          <li><a href="configs/emanet">EMANet (ICCV'2019)</a></li>
-          <li><a href="configs/ccnet">CCNet (ICCV'2019)</a></li>
-          <li><a href="configs/dmnet">DMNet (ICCV'2019)</a></li>
-          <li><a href="configs/sem_fpn">Semantic FPN (CVPR'2019)</a></li>
-          <li><a href="configs/danet">DANet (CVPR'2019)</a></li>
-          <li><a href="configs/apcnet">APCNet (CVPR'2019)</a></li>
-          <li><a href="configs/nonlocal_net">NonLocal Net (CVPR'2018)</a></li>
-          <li><a href="configs/encnet">EncNet (CVPR'2018)</a></li>
-          <li><a href="configs/deeplabv3plus">DeepLabV3+ (CVPR'2018)</a></li>
-          <li><a href="configs/upernet">UPerNet (ECCV'2018)</a></li>
-          <li><a href="configs/icnet">ICNet (ECCV'2018)</a></li>
-          <li><a href="configs/psanet">PSANet (ECCV'2018)</a></li>
-          <li><a href="configs/bisenetv1">BiSeNetV1 (ECCV'2018)</a></li>
-          <li><a href="configs/deeplabv3">DeepLabV3 (ArXiv'2017)</a></li>
-          <li><a href="configs/pspnet">PSPNet (CVPR'2017)</a></li>
-          <li><a href="configs/erfnet">ERFNet (T-ITS'2017)</a></li>
-          <li><a href="configs/unet">UNet (MICCAI'2016/Nat. Methods'2019)</a></li>
-          <li><a href="configs/fcn">FCN (CVPR'2015/TPAMI'2017)</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="mmseg/models/decode_heads/ann_head.py">ANN_Head</li>
-          <li><a href="mmseg/models/decode_heads/apc_head.py">APC_Head</li>
-          <li><a href="mmseg/models/decode_heads/aspp_head.py">ASPP_Head</li>
-          <li><a href="mmseg/models/decode_heads/cc_head.py">CC_Head</li>
-          <li><a href="mmseg/models/decode_heads/da_head.py">DA_Head</li>
-          <li><a href="mmseg/models/decode_heads/ddr_head.py">DDR_Head</li>
-          <li><a href="mmseg/models/decode_heads/dm_head.py">DM_Head</li>
-          <li><a href="mmseg/models/decode_heads/dnl_head.py">DNL_Head</li>
-          <li><a href="mmseg/models/decode_heads/dpt_head.py">DPT_HEAD</li>
-          <li><a href="mmseg/models/decode_heads/ema_head.py">EMA_Head</li>
-          <li><a href="mmseg/models/decode_heads/enc_head.py">ENC_Head</li>
-          <li><a href="mmseg/models/decode_heads/fcn_head.py">FCN_Head</li>
-          <li><a href="mmseg/models/decode_heads/fpn_head.py">FPN_Head</li>
-          <li><a href="mmseg/models/decode_heads/gc_head.py">GC_Head</li>
-          <li><a href="mmseg/models/decode_heads/ham_head.py">LightHam_Head</li>
-          <li><a href="mmseg/models/decode_heads/isa_head.py">ISA_Head</li>
-          <li><a href="mmseg/models/decode_heads/knet_head.py">Knet_Head</li>
-          <li><a href="mmseg/models/decode_heads/lraspp_head.py">LRASPP_Head</li>
-          <li><a href="mmseg/models/decode_heads/mask2former_head.py">mask2former_Head</li>
-          <li><a href="mmseg/models/decode_heads/maskformer_head.py">maskformer_Head</li>
-          <li><a href="mmseg/models/decode_heads/nl_head.py">NL_Head</li>
-          <li><a href="mmseg/models/decode_heads/ocr_head.py">OCR_Head</li>
-          <li><a href="mmseg/models/decode_heads/pid_head.py">PID_Head</li>
-          <li><a href="mmseg/models/decode_heads/point_head.py">point_Head</li>
-          <li><a href="mmseg/models/decode_heads/psa_head.py">PSA_Head</li>
-          <li><a href="mmseg/models/decode_heads/psp_head.py">PSP_Head</li>
-          <li><a href="mmseg/models/decode_heads/san_head.py">SAN_Head</li>
-          <li><a href="mmseg/models/decode_heads/segformer_head.py">segformer_Head</li>
-          <li><a href="mmseg/models/decode_heads/segmenter_mask_head.py">segmenter_mask_Head</li>
-          <li><a href="mmseg/models/decode_heads/sep_aspp_head.py">SepASPP_Head</li>
-          <li><a href="mmseg/models/decode_heads/sep_fcn_head.py">SepFCN_Head</li>
-          <li><a href="mmseg/models/decode_heads/setr_mla_head.py">SETRMLAHead_Head</li>
-          <li><a href="mmseg/models/decode_heads/setr_up_head.py">SETRUP_Head</li>
-          <li><a href="mmseg/models/decode_heads/stdc_head.py">STDC_Head</li>
-          <li><a href="mmseg/models/decode_heads/uper_head.py">Uper_Head</li>
-          <li><a href="mmseg/models/decode_heads/vpd_depth_head.py">VPDDepth_Head</li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#cityscapes">Cityscapes</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#pascal-voc">PASCAL VOC</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#ade20k">ADE20K</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#pascal-context">Pascal Context</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#coco-stuff-10k">COCO-Stuff 10k</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#coco-stuff-164k">COCO-Stuff 164k</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#chase-db1">CHASE_DB1</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#drive">DRIVE</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#hrf">HRF</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#stare">STARE</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#dark-zurich">Dark Zurich</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#nighttime-driving">Nighttime Driving</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#loveda">LoveDA</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#isprs-potsdam">Potsdam</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#isprs-vaihingen">Vaihingen</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#isaid">iSAID</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#mapillary-vistas-datasets">Mapillary Vistas</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#levir-cd">LEVIR-CD</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#bdd100K">BDD100K</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#nyu">NYU</a></li>
-          <li><a href="https://github.com/open-mmlab/mmsegmentation/blob/main/docs/en/user_guides/2_dataset_prepare.md#hsi-drive-2.0">HSIDrive20</a></li>
-        </ul>
-      </td>
-      <td>
-        <ul>
-          <li><b>Supported loss</b></li>
-        <ul>
-          <li><a href="mmseg/models/losses/boundary_loss.py">boundary_loss</a></li>
-          <li><a href="mmseg/models/losses/cross_entropy_loss.py">cross_entropy_loss</a></li>
-          <li><a href="mmseg/models/losses/dice_loss.py">dice_loss</a></li>
-          <li><a href="mmseg/models/losses/focal_loss.py">focal_loss</a></li>
-          <li><a href="mmseg/models/losses/huasdorff_distance_loss.py">huasdorff_distance_loss</a></li>
-          <li><a href="mmseg/models/losses/kldiv_loss.py">kldiv_loss</a></li>
-          <li><a href="mmseg/models/losses/lovasz_loss.py">lovasz_loss</a></li>
-          <li><a href="mmseg/models/losses/ohem_cross_entropy_loss.py">ohem_cross_entropy_loss</a></li>
-          <li><a href="mmseg/models/losses/silog_loss.py">silog_loss</a></li>
-          <li><a href="mmseg/models/losses/tversky_loss.py">tversky_loss</a></li>
-        </ul>
-        </ul>
-      </td>
-  </tbody>
-</table>
+Для всех трёх выборок были построены визуализации с наложением масок на исходные изображения.
 
-Please refer to [FAQ](docs/en/notes/faq.md) for frequently asked questions.
+### Обнаруженные проблемы разметки
 
-## Projects
+В исходных масках были обнаружены следующие типы ошибок:
 
-[Here](projects/README.md) are some implementations of SOTA models and solutions built on MMSegmentation, which are supported and maintained by community users. These projects demonstrate the best practices based on MMSegmentation for research and product development. We welcome and appreciate all the contributions to OpenMMLab ecosystem.
+* неверно назначенный класс;
+* полностью или частично пропущенные объекты;
+* выход маски за границы объекта;
+* неполная сегментация объекта;
+* артефактная разметка;
+* неточные границы;
+* частично выделенные объекты;
+* другие несоответствия между изображением и Ground Truth.
 
-## Contributing
+Особенно критичным примером являлась ситуация, когда у кошки были размечены только отдельные локальные признаки, например кончики ушей, вместо всего объекта. Такая разметка потенциально могла заставить модель связывать класс `cat` с отдельным локальным признаком, а не с формой объекта в целом.
 
-We appreciate all contributions to improve MMSegmentation. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the contributing guideline.
+---
 
-## Acknowledgement
+## 6. Исправление разметки
 
-MMSegmentation is an open source project that welcome any contribution and feedback.
-We wish that the toolbox and benchmark could serve the growing research
-community by providing a flexible as well as standardized toolkit to reimplement existing methods
-and develop their own new semantic segmentation methods.
+Из-за небольшого размера датасета было принято решение не просто удалять ошибочные изображения, а провести проверку и корректировку существующей разметки.
 
-## Citation
+Работа с разметкой включала два уровня:
 
-If you find this project useful in your research, please consider cite:
+1. проверка и уточнение границ масок на изображениях `train`, `val` и `test`;
+2. дополнительная детальная корректировка **18 наиболее проблемных изображений обучающей выборки**.
 
-```bibtex
-@misc{mmseg2020,
-    title={{MMSegmentation}: OpenMMLab Semantic Segmentation Toolbox and Benchmark},
-    author={MMSegmentation Contributors},
-    howpublished = {\url{https://github.com/open-mmlab/mmsegmentation}},
-    year={2020}
-}
+Для исправления разметки использовался **CVAT**.
+
+Исходные маски были сохранены отдельно, поэтому имеется возможность сравнивать первоначальную и исправленную версии.
+
+Для 18 наиболее проблемных изображений были сохранены примеры:
+
+* **до исправления**;
+* **после исправления**.
+
+После корректировки цветные маски CVAT были преобразованы в индексированные маски:
+
+```text
+0 — background
+1 — cat
+2 — dog
 ```
 
-## License
+---
 
-This project is released under the [Apache 2.0 license](LICENSE).
+## 7. Проверка подготовленных масок
 
-## OpenMMLab Family
+После исправления разметки все рабочие маски были автоматически проверены.
 
-- [MMEngine](https://github.com/open-mmlab/mmengine): OpenMMLab foundational library for training deep learning models.
-- [MMCV](https://github.com/open-mmlab/mmcv): OpenMMLab foundational library for computer vision.
-- [MMPreTrain](https://github.com/open-mmlab/mmpretrain): OpenMMLab pre-training toolbox and benchmark.
-- [MMagic](https://github.com/open-mmlab/mmagic): Open**MM**Lab **A**dvanced, **G**enerative and **I**ntelligent **C**reation toolbox.
-- [MMDetection](https://github.com/open-mmlab/mmdetection): OpenMMLab detection toolbox and benchmark.
-- [MMYOLO](https://github.com/open-mmlab/mmyolo): OpenMMLab YOLO series toolbox and benchmark.
-- [MMDetection3D](https://github.com/open-mmlab/mmdetection3d): OpenMMLab's next-generation platform for general 3D object detection.
-- [MMRotate](https://github.com/open-mmlab/mmrotate): OpenMMLab rotated object detection toolbox and benchmark.
-- [MMTracking](https://github.com/open-mmlab/mmtracking): OpenMMLab video perception toolbox and benchmark.
-- [MMSegmentation](https://github.com/open-mmlab/mmsegmentation): OpenMMLab semantic segmentation toolbox and benchmark.
-- [MMOCR](https://github.com/open-mmlab/mmocr): OpenMMLab text detection, recognition, and understanding toolbox.
-- [MMPose](https://github.com/open-mmlab/mmpose): OpenMMLab pose estimation toolbox and benchmark.
-- [MMHuman3D](https://github.com/open-mmlab/mmhuman3d): OpenMMLab 3D human parametric model toolbox and benchmark.
-- [MMFewShot](https://github.com/open-mmlab/mmfewshot): OpenMMLab fewshot learning toolbox and benchmark.
-- [MMAction2](https://github.com/open-mmlab/mmaction2): OpenMMLab's next-generation action understanding toolbox and benchmark.
-- [MMFlow](https://github.com/open-mmlab/mmflow): OpenMMLab optical flow toolbox and benchmark.
-- [MMDeploy](https://github.com/open-mmlab/mmdeploy): OpenMMLab Model Deployment Framework.
-- [MMRazor](https://github.com/open-mmlab/mmrazor): OpenMMLab model compression toolbox and benchmark.
-- [MIM](https://github.com/open-mmlab/mim): MIM installs OpenMMLab packages.
-- [Playground](https://github.com/open-mmlab/playground): A central hub for gathering and showcasing amazing projects built upon OpenMMLab.
+Результаты проверки:
+
+| Проверка                     | Train | Val | Test |
+| ---------------------------- | ----: | --: | ---: |
+| Изображения                  |   199 | 120 |  120 |
+| Корректные изображения       |   199 | 120 |  120 |
+| Ошибки чтения                |     0 |   0 |    0 |
+| Отсутствующие маски          |     0 |   0 |    0 |
+| Некорректные индексные маски |     0 |   0 |    0 |
+
+В рабочих индексированных масках используются только допустимые значения:
+
+```text
+0
+1
+2
+```
+
+Таким образом, перед обучением была сформирована согласованная версия датасета.
+
+---
+
+## 8. EDA: баланс классов
+
+Всего в анализе используется:
+
+> **439 изображений**
+
+Распределение пикселей по классам:
+
+| Класс      | Доля пикселей |
+| ---------- | ------------: |
+| Background |    **90.01%** |
+| Cat        |     **5.77%** |
+| Dog        |     **4.22%** |
+
+Таким образом, около 90% изображения занимает фон.
+
+Это является важной особенностью задачи.
+
+Высокая pixel accuracy сама по себе не гарантирует хорошей сегментации кошек и собак, поскольку модель может получить высокую точность за счёт правильной классификации большого количества фоновых пикселей.
+
+Поэтому основной метрикой проекта выбрана:
+
+> **mDice**
+
+Дополнительно анализируются:
+
+* mIoU;
+* mAcc;
+* aAcc.
+
+---
+
+## 9. EDA: количество и размеры объектов
+
+В датасете было обнаружено **473 связные области объектов**:
+
+| Класс | Количество областей |
+| ----- | ------------------: |
+| Cat   |                 233 |
+| Dog   |                 240 |
+
+Среднее количество связных областей на изображение:
+
+* `cat` — около `0.53`;
+* `dog` — около `0.55`.
+
+Средняя площадь связной области:
+
+| Класс | Средняя площадь |
+| ----- | --------------: |
+| Cat   |    **7 124 px** |
+| Dog   |    **5 056 px** |
+
+Максимальная площадь связной области:
+
+| Класс | Максимальная площадь |
+| ----- | -------------------: |
+| Cat   |        **23 142 px** |
+| Dog   |        **25 988 px** |
+
+Средняя доля изображения, занимаемая отдельными связными областями:
+
+* `cat` — около **10.87%**;
+* `dog` — около **7.71%**.
+
+При этом минимальная площадь отдельной связной компоненты составляет 1 пиксель. Такие компоненты не следует автоматически интерпретировать как отдельные физические объекты: они могут возникать вследствие особенностей формирования сегментационных масок и границ между классами.
+
+---
+
+## 10. EDA: визуальный анализ
+
+Для каждой выборки были визуально проверены примеры изображений с наложенными исправленными масками.
+
+Дополнительно для 18 наиболее проблемных изображений `train` были сформированы пары:
+
+```text
+Original image + исходная маска
+              ↓
+        исправление
+              ↓
+Original image + исправленная маска
+```
+
+Это позволяет визуально подтвердить качество проведённой коррекции разметки.
+
+---
+
+## 11. Выводы по EDA
+
+EDA показал несколько важных особенностей задачи:
+
+1. датасет небольшой — 439 изображений;
+2. все изображения имеют фиксированный размер `256×256`;
+3. присутствует выраженный дисбаланс между background и объектными классами;
+4. объекты занимают относительно небольшую часть изображения;
+5. кошки и собаки представлены примерно сопоставимым количеством связных областей;
+6. исходная разметка содержала существенные ошибки;
+7. качество границ Ground Truth непосредственно влияет на качество обучения.
+
+Поэтому на следующих этапах было решено:
+
+* использовать mDice как основную метрику;
+* применять Dice Loss совместно с Cross-Entropy Loss;
+* исследовать аугментации;
+* проверить различные архитектуры;
+* отдельно исследовать pretrained-модель;
+* анализировать не только итоговые метрики, но и визуальные ошибки.
+
+---
+
+# Этап 2. Формирование первичных гипотез
+
+## 12. Baseline
+
+В качестве базовой архитектуры была выбрана **U-Net**.
+
+Причины выбора:
+
+* encoder-decoder структура хорошо подходит для сегментации;
+* skip-connections позволяют передавать пространственную информацию из ранних слоёв в decoder;
+* архитектура является удобной отправной точкой для сравнения различных decode head.
+
+Были сформированы две стартовые гипотезы.
+
+---
+
+## 13. Стартовая гипотеза 1 — U-Net + FCN
+
+В качестве первого baseline использовалась:
+
+> **U-Net + FCN**
+
+FCN выбран как относительно простой decode head.
+
+Цель эксперимента — получить контрольную точку, относительно которой можно оценивать влияние усложнения decoder и последующих изменений.
+
+### Основные параметры
+
+| Параметр         | Значение             |
+| ---------------- | -------------------- |
+| Input size       | `256×256`            |
+| Batch size       | `4`                  |
+| Epochs           | `200`                |
+| Optimizer        | `AdamW`              |
+| Learning rate    | `0.001`              |
+| Weight decay     | `0.1`                |
+| Scheduler        | `PolyLR`             |
+| Power            | `0.9`                |
+| Eta min          | `1e-4`               |
+| Loss             | Cross Entropy + Dice |
+| Dice loss weight | `4.0`                |
+| Classes          | `3`                  |
+| Augmentation     | Нет                  |
+
+Конфигурация:
+
+```text
+configs/cats_dogs/unet_fcn_no_aug.py
+```
+
+### Результат
+
+| Метрика | Validation |       Test |
+| ------- | ---------: | ---------: |
+| mDice   |     63.52% | **62.38%** |
+| mIoU    |     51.62% | **50.72%** |
+| mAcc    |     62.42% | **61.53%** |
+| aAcc    |     91.70% | **91.83%** |
+
+---
+
+# 14. Стартовая гипотеза 2 — U-Net + PSPNet
+
+Вторая модель:
+
+> **U-Net + PSPNet**
+
+В отличие от FCN, PSPNet использует Pyramid Pooling Module для обработки контекста на различных пространственных масштабах.
+
+Гипотеза:
+
+> Использование многоуровневого контекста позволит улучшить сегментацию объектов по сравнению с простым FCN decoder.
+
+Остальные условия обучения сохранялись максимально близкими к первому эксперименту.
+
+Конфигурация:
+
+```text
+configs/cats_dogs/unet_pspnet_no_aug.py
+```
+
+### Результат
+
+| Метрика | Validation |   Test |
+| ------- | ---------: | -----: |
+| mDice   | **65.00%** | 62.05% |
+| mIoU    | **52.91%** | 50.41% |
+| mAcc    |     62.39% | 60.13% |
+| aAcc    |     92.22% | 91.93% |
+
+---
+
+## 15. Сравнение baseline-моделей
+
+| Модель         |  Val mDice |   Val mIoU | Test mDice |  Test mIoU |
+| -------------- | ---------: | ---------: | ---------: | ---------: |
+| U-Net + FCN    |     63.52% |     51.62% | **62.38%** | **50.72%** |
+| U-Net + PSPNet | **65.00%** | **52.91%** |     62.05% |     50.41% |
+
+На validation выборке PSPNet показал преимущество:
+
+* `mDice`: `+1.48 п.п.`;
+* `mIoU`: `+1.29 п.п.`.
+
+Однако на test выборке результаты оказались практически одинаковыми.
+
+Поэтому в качестве основы для дальнейших экспериментов была выбрана:
+
+> **U-Net + PSPNet**
+
+Её тестовый mDice:
+
+> **62.05%**
+
+---
+
+# Этап 3. Эксперименты по улучшению качества
+
+## 16. Цель этапа
+
+После baseline необходимо было повысить качество модели и достичь:
+
+> **mDice > 75%**
+
+В качестве отправной точки использовалась:
+
+> **U-Net + PSPNet, Test mDice = 62.05%**
+
+Были проверены три направления:
+
+1. усиление аугментаций;
+2. изменение гиперпараметров обучения;
+3. переход на HRNet-W18 с pretrained-весами и fine-tuning.
+
+---
+
+# 17. Эксперимент 1 — усиленные аугментации
+
+Первый эксперимент был направлен на увеличение разнообразия обучающих данных.
+
+Использовались:
+
+### `PhotoMetricDistortion`
+
+Изменяет:
+
+* яркость;
+* контраст;
+* насыщенность;
+* оттенок.
+
+Это позволяет уменьшить зависимость модели от конкретных условий освещения и цветопередачи.
+
+### `RandomRotate`
+
+Случайный поворот изображения и соответствующей маски на угол:
+
+```text
+−45° ... +45°
+```
+
+Позволяет повысить устойчивость модели к ориентации объектов.
+
+### `RandomCutOut`
+
+Закрывает отдельные области изображения прямоугольными фрагментами.
+
+Аугментация имитирует частичное перекрытие объекта и заставляет модель использовать более устойчивые признаки.
+
+### `GridDistortion`
+
+Вносит геометрическое искажение изображения.
+
+Это увеличивает разнообразие форм и пространственного расположения объектов.
+
+---
+
+## 18. Результат эксперимента 1
+
+| Метрика    | Baseline | Experiment 1 |
+| ---------- | -------: | -----------: |
+| Val mDice  |   65.00% |   **66.84%** |
+| Test mDice |   62.05% |   **69.09%** |
+| Test mIoU  |   50.41% |   **57.17%** |
+| Test mAcc  |   60.13% |   **65.65%** |
+| Test aAcc  |   91.93% |   **93.86%** |
+
+Прирост test mDice:
+
+> **62.05% → 69.09%**
+
+или:
+
+> **+7.04 п.п.**
+
+Таким образом, гипотеза об эффективности увеличения разнообразия обучающих данных подтвердилась.
+
+Однако:
+
+> **69.09% < 75%**
+
+поэтому требуемая метрика ещё не была достигнута.
+
+Конфигурация:
+
+```text
+configs/cats_dogs/unet_pspnet_aug.py
+```
+
+---
+
+# 19. Эксперимент 2 — изменение гиперпараметров
+
+Во втором эксперименте архитектура и набор аугментаций были сохранены.
+
+Изменялась стратегия оптимизации.
+
+Основное изменение:
+
+```text
+learning rate:
+0.001 → 0.0005
+```
+
+Также изменялось минимальное значение `eta_min` в `PolyLR`:
+
+```text
+1e-4 → 1e-5
+```
+
+Гипотеза заключалась в том, что более аккуратное уменьшение шага обучения позволит модели лучше донастроить параметры на последних этапах обучения.
+
+---
+
+## 20. Результат эксперимента 2
+
+| Метрика    | Experiment 1 | Experiment 2 |
+| ---------- | -----------: | -----------: |
+| Val mDice  |       66.84% |       64.53% |
+| Test mDice |   **69.09%** |       66.02% |
+| Test mIoU  |   **57.17%** |       54.70% |
+| Test mAcc  |   **65.65%** |       63.30% |
+| Test aAcc  |   **93.86%** |       93.65% |
+
+Изменение гиперпараметров не дало дополнительного прироста.
+
+Наоборот:
+
+> **69.09% → 66.02%**
+
+Тем не менее результат остался выше исходного baseline:
+
+> **66.02% > 62.05%**
+
+Следовательно, в выбранной конфигурации простое уменьшение learning rate не оказалось эффективнее усиленных аугментаций.
+
+Конфигурация:
+
+```text
+configs/cats_dogs/unet_pspnet_aug_exp2.py
+```
+
+---
+
+# 21. Эксперимент 3 — HRNet-W18 + pretrained + fine-tuning
+
+Третий эксперимент стал наиболее существенным изменением.
+
+Вместо U-Net + PSPNet была выбрана архитектура:
+
+> **HRNet-W18**
+
+Модель использовала:
+
+* предварительно обученные веса;
+* последующий fine-tuning на целевом датасете;
+* усиленные аугментации.
+
+Основная гипотеза:
+
+> На небольшом целевом датасете использование pretrained-весов позволит использовать уже сформированные визуальные признаки и значительно повысить качество по сравнению с обучением архитектуры с нуля.
+
+Это особенно актуально для данного проекта, поскольку EDA показал небольшой размер датасета.
+
+Конфигурация:
+
+```text
+configs/cats_dogs/hrnet_fcn_finetune.py
+```
+
+---
+
+# 22. Результат HRNet-W18
+
+| Метрика | Validation |       Test |
+| ------- | ---------: | ---------: |
+| mDice   | **82.48%** | **82.17%** |
+| mIoU    |          — | **71.76%** |
+| mAcc    |          — | **81.52%** |
+| aAcc    |          — | **96.09%** |
+
+Test mDice:
+
+> **82.17%**
+
+По сравнению с исходным baseline:
+
+```text
+62.05% → 82.17%
+```
+
+Прирост:
+
+> **+20.12 п.п.**
+
+По сравнению с лучшим вариантом U-Net + PSPNet:
+
+```text
+69.09% → 82.17%
+```
+
+Прирост:
+
+> **+13.08 п.п.**
+
+Целевая метрика:
+
+```text
+75%
+```
+
+Фактическая:
+
+```text
+82.17%
+```
+
+Превышение:
+
+> **+7.17 п.п.**
+
+---
+
+# 23. Сводное сравнение всех экспериментов
+
+| Эксперимент                                                  |  Val mDice | Test mDice |  Test mIoU |  Test mAcc |  Test aAcc |
+| ------------------------------------------------------------ | ---------: | ---------: | ---------: | ---------: | ---------: |
+| **U-Net + FCN baseline**                                     |     63.52% | **62.38%** |     50.72% |     61.53% |     91.83% |
+| **U-Net + PSPNet baseline**                                  |     65.00% | **62.05%** |     50.41% |     60.13% |     91.93% |
+| **U-Net + PSPNet + аугментации**                             |     66.84% | **69.09%** |     57.17% |     65.65% |     93.86% |
+| **U-Net + PSPNet + аугментации + изменение гиперпараметров** |     64.53% | **66.02%** |     54.70% |     63.30% |     93.65% |
+| **HRNet-W18 + pretrained + fine-tuning**                     | **82.48%** | **82.17%** | **71.76%** | **81.52%** | **96.09%** |
+
+---
+
+# 24. Анализ экспериментов
+
+### Эксперимент 1 — аугментации
+
+Аугментации дали заметный прирост:
+
+> `62.05% → 69.09%`
+
+Это подтверждает гипотезу о том, что увеличение разнообразия обучающих примеров улучшает обобщающую способность модели.
+
+---
+
+### Эксперимент 2 — learning rate
+
+Изменение learning rate не дало положительного результата:
+
+> `69.09% → 66.02%`
+
+Следовательно, в рамках выбранной архитектуры и остальных параметров дальнейшее уменьшение learning rate не являлось эффективным направлением.
+
+---
+
+### Эксперимент 3 — pretrained HRNet
+
+Наибольший прирост был получен при переходе на:
+
+> **HRNet-W18 + pretrained-веса + fine-tuning + усиленные аугментации**
+
+Это позволило достичь:
+
+> **82.17% Test mDice**
+
+Важно отметить, что в этом эксперименте одновременно изменились архитектура и способ инициализации backbone.
+
+Поэтому полученный прирост нельзя строго приписать только HRNet или только pretrained-весам.
+
+Корректнее рассматривать результат как эффективность комбинации:
+
+```text
+HRNet-W18
++
+pretrained weights
++
+fine-tuning
++
+усиленные аугментации
+```
+
+---
+
+# Этап 4. Заключение и выбор лучшего эксперимента
+
+## 25. Лучшая модель
+
+По результатам всех экспериментов лучшей была выбрана:
+
+> **HRNet-W18 + pretrained + fine-tuning**
+
+Лучшая модель сохранена в checkpoint:
+
+```text
+best_mDice_epoch_50.pth
+```
+
+Лучшая эпоха:
+
+> **Epoch 50**
+
+Модель решает задачу сегментации трёх классов:
+
+```text
+background
+cat
+dog
+```
+
+Размер входного изображения:
+
+```text
+256 × 256
+```
+
+Для сегментации используется FCN-head с комбинацией:
+
+```text
+Cross-Entropy Loss
++
+Dice Loss
+```
+
+---
+
+## 26. Финальные тестовые метрики
+
+| Метрика   |   Значение |
+| --------- | ---------: |
+| **mDice** | **82.17%** |
+| **mIoU**  | **71.76%** |
+| **mAcc**  | **81.52%** |
+| **aAcc**  | **96.09%** |
+
+Главная метрика:
+
+> **mDice = 82.17%**
+
+Цель:
+
+> **mDice > 75%**
+
+Результат:
+
+> **Цель выполнена.**
+
+---
+
+## 27. Почему mDice является основной метрикой
+
+В датасете:
+
+```text
+background = 90.01%
+cat        = 5.77%
+dog        = 4.22%
+```
+
+Поэтому высокая `aAcc` может быть получена даже при недостаточно хорошем качестве сегментации объектов.
+
+Например, модель может правильно классифицировать большую часть фоновых пикселей, но ошибаться на кошках и собаках.
+
+mDice лучше отражает качество сегментации целевых классов, поскольку оценивает перекрытие предсказанной и эталонной областей.
+
+Поэтому при выборе лучшей модели приоритет отдавался:
+
+1. `mDice`;
+2. `mIoU`;
+3. дополнительным метрикам `mAcc` и `aAcc`;
+4. визуальному качеству Prediction.
+
+---
+
+# 28. Анализ предсказаний лучшей модели
+
+После выбора HRNet-W18 был выполнен отдельный этап анализа предсказаний на тестовой выборке.
+
+Всего было проанализировано:
+
+> **120 тестовых изображений**
+
+Для каждого изображения сохранялась предсказанная индексированная маска.
+
+После этого выполнялся расчёт:
+
+* Dice для `cat`;
+* Dice для `dog`;
+* object mDice;
+* доли корректных пикселей;
+* доли ошибочных пикселей;
+* пропущенных объектов;
+* ложных объектов;
+* перепутанных классов.
+
+---
+
+## 29. Общая статистика ошибок
+
+На тестовой выборке:
+
+| Показатель                           |   Значение |
+| ------------------------------------ | ---------: |
+| Корректно классифицированные пиксели | **96.09%** |
+| Ошибочно классифицированные пиксели  |  **3.91%** |
+| Пропущенные объекты                  |  **1.58%** |
+| Ложные объекты                       |  **1.32%** |
+| Перепутанные классы                  |  **1.00%** |
+
+Таким образом, основная часть пикселей классифицируется корректно.
+
+---
+
+# 30. Основные типы ошибок
+
+## 30.1. Перепутывание `cat` и `dog`
+
+Одна из основных проблем — ситуация, когда модель правильно находит область животного, но выбирает неправильный класс.
+
+Например:
+
+```text
+Ground Truth: cat
+Prediction:   dog
+```
+
+или:
+
+```text
+Ground Truth: dog
+Prediction:   cat
+```
+
+Это особенно важно для данной задачи, поскольку пространственное положение объекта при этом может быть определено правильно, но семантическая классификация остаётся ошибочной.
+
+---
+
+## 30.2. Пропуск небольших объектов
+
+При небольшом размере объекта модель может полностью или частично классифицировать его как `background`.
+
+Это приводит к:
+
+* пропуску объекта;
+* снижению Dice соответствующего класса;
+* ухудшению mDice.
+
+Проблема особенно актуальна с учётом того, что входное изображение имеет размер всего:
+
+```text
+256 × 256
+```
+
+---
+
+## 30.3. Неточные границы
+
+Даже если класс объекта определён правильно, границы Prediction могут не совпадать с Ground Truth.
+
+Возможны ситуации:
+
+* модель захватывает часть фона;
+* часть объекта не выделяется;
+* контур получается слишком большим;
+* контур получается слишком маленьким.
+
+Такие ошибки непосредственно влияют на:
+
+* Dice;
+* IoU;
+* качество визуальной сегментации.
+
+---
+
+# 31. Возможности дальнейшего улучшения
+
+Несмотря на достижение целевого результата, качество модели можно улучшать.
+
+### 31.1. Увеличение датасета
+
+Наиболее перспективное направление — увеличение количества и разнообразия обучающих данных.
+
+Особенно полезны:
+
+* новые ракурсы;
+* разные размеры объектов;
+* разные условия освещения;
+* сложные фоны;
+* частично перекрытые объекты;
+* изображения с похожими друг на друга кошками и собаками.
+
+---
+
+### 31.2. Hard examples
+
+Можно сформировать отдельный набор сложных примеров, на которых модель чаще всего ошибается.
+
+Например:
+
+```text
+cat → dog
+dog → cat
+small object → background
+```
+
+После этого можно использовать hard examples для дополнительного обучения.
+
+---
+
+### 31.3. Маленькие объекты
+
+Для повышения качества сегментации маленьких объектов можно исследовать:
+
+* crop-oriented augmentation;
+* увеличение разрешения входных изображений;
+* добавление изображений с маленькими объектами;
+* стратегии, увеличивающие долю объекта в crop.
+
+---
+
+### 31.4. Качество границ
+
+Для улучшения границ можно исследовать:
+
+* большее разрешение;
+* дополнительные геометрические аугментации;
+* функции потерь, ориентированные на границы;
+* изменение соотношения Dice Loss и Cross-Entropy Loss.
+
+---
+
+### 31.5. Дополнительное обучение
+
+По динамике метрик видно, что обучение не обязательно полностью исчерпало потенциал выбранного количества эпох.
+
+Поэтому отдельным экспериментом можно проверить увеличение количества эпох и посмотреть, продолжает ли расти качество.
+
+---
+
+# 32. ClearML
+
+Изначально планировалось использовать **ClearML** для:
+
+* централизованного логирования экспериментов;
+* хранения метрик;
+* отслеживания запусков;
+* удобного сравнения экспериментов.
+
+Однако при настройке ClearML возникли проблемы с сетевым подключением между сервисом ClearML и интернет-провайдером, через который выполнялся проект.
+
+В результате стабильная передача данных в удалённую инфраструктуру ClearML не была обеспечена.
+
+Это не повлияло на обучение моделей.
+
+Все эксперименты выполнялись локально с использованием:
+
+* MMSegmentation;
+* MMEngine;
+* PyTorch.
+
+Результаты сохранялись в локальной файловой системе:
+
+* checkpoints;
+* логи MMEngine;
+* JSON-логи;
+* графики;
+* результаты тестирования;
+* предсказанные маски;
+* результаты анализа ошибок.
+
+Таким образом, ход экспериментов и результаты не потеряны и могут быть восстановлены непосредственно из проекта и Jupyter Notebook.
+
+---
+
+# Этап 5. Структура проекта
+
+## 33. Общая структура
+
+```text
+mmsegmentation
+├── artifacts
+│   ├── cvat_annotations
+│   │   ├── test_annotations.zip
+│   │   ├── train_annotations.zip
+│   │   └── val_annotations.zip
+│   ├── stage_2
+│   │   ├── unet_fcn_no_aug
+│   │   └── unet_pspnet_no_aug
+│   └── stage_3
+│       ├── hrnet_w18_finetune
+│       ├── unet_pspnet_aug
+│       └── unet_pspnet_aug_exp2
+│
+├── configs
+│   ├── _base_
+│   │   ├── datasets
+│   │   │   ├── cats_dogs.py
+│   │   │   ├── cats_dogs_aug.py
+│   │   │   └── cats_dogs_no_aug.py
+│   │   └── schedules
+│   │       ├── cats_dogs_finetune_schedule.py
+│   │       └── cats_dogs_schedule.py
+│   │
+│   └── cats_dogs
+│       ├── hrnet_fcn_finetune.py
+│       ├── unet_fcn_aug.py
+│       ├── unet_fcn_no_aug.py
+│       ├── unet_pspnet_aug_exp2.py
+│       ├── unet_pspnet_aug.py
+│       └── unet_pspnet_no_aug.py
+│
+├── data
+│   ├── bad_masks
+│   ├── correct_mask
+│   ├── correct_mask_indexed
+│   ├── mask_overlays
+│   └── raw_dataset
+│
+├── mmseg
+│   └── datasets
+│       └── cats_dogs_dataset.py
+│
+└── src
+    ├── analysis
+    │   ├── metrics.py
+    │   ├── predictions.py
+    │   └── statistics.py
+    │
+    ├── data
+    │   ├── dataset.py
+    │   ├── preprocessing.py
+    │   └── visualization.py
+    │
+    ├── config.py
+    └── utils.py
+```
+
+---
+
+# 34. `src/`
+
+`src/` содержит собственный код проекта.
+
+Он разделён на несколько функциональных блоков:
+
+```text
+src
+├── analysis
+├── data
+├── config.py
+└── utils.py
+```
+
+---
+
+## 35. `src/config.py`
+
+Центральная конфигурация проекта.
+
+Содержит:
+
+* пути к данным;
+* пути к маскам;
+* классы;
+* размеры изображений;
+* пути к конфигурациям MMSegmentation;
+* директории результатов;
+* параметры экспериментов;
+* настройки визуализации.
+
+Центральная конфигурация позволяет не дублировать пути и параметры в различных частях проекта.
+
+---
+
+# 36. `src/utils.py`
+
+Общие вспомогательные функции.
+
+В частности, содержит функцию фиксации случайных состояний генераторов случайных чисел для обеспечения воспроизводимости экспериментов.
+
+---
+
+# 37. `src/data/dataset.py`
+
+Модуль подготовки и проверки датасета.
+
+Основные задачи:
+
+* проверка значений масок;
+* проверка структуры данных;
+* подготовка архивов аннотаций для CVAT;
+* работа с исходными изображениями и масками.
+
+---
+
+# 38. `src/data/preprocessing.py`
+
+Модуль предварительной обработки масок.
+
+Основная функция — преобразование цветных масок CVAT в индексированные маски MMSegmentation:
+
+```text
+background → 0
+cat        → 1
+dog        → 2
+```
+
+---
+
+# 39. `src/data/visualization.py`
+
+Модуль визуализации.
+
+Используется для:
+
+* наложения масок на изображения;
+* визуального контроля разметки;
+* сравнения исходных и исправленных масок;
+* визуализации аугментаций;
+* подготовки изображений для анализа результатов.
+
+---
+
+# 40. `src/analysis/statistics.py`
+
+Модуль EDA.
+
+Основные задачи:
+
+* сбор статистики датасета;
+* проверка качества данных;
+* анализ размеров изображений;
+* анализ размеров объектов;
+* расчёт баланса классов;
+* построение графиков;
+* визуальный анализ примеров.
+
+---
+
+# 41. `src/analysis/metrics.py`
+
+Модуль анализа обучения.
+
+Используется для:
+
+* поиска последнего эксперимента;
+* поиска логов MMEngine;
+* обработки JSONL-логов;
+* построения графиков;
+* анализа динамики обучения;
+* сравнения экспериментов.
+
+Сравнение выполняется по:
+
+```text
+mDice
+mIoU
+mAcc
+aAcc
+```
+
+---
+
+# 42. `src/analysis/predictions.py`
+
+Модуль анализа предсказаний.
+
+Используется для:
+
+* сохранения Prediction;
+* расчёта Dice по классам;
+* анализа лучших и худших предсказаний;
+* сравнения Ground Truth и Prediction;
+* определения типов ошибок;
+* анализа пропущенных объектов;
+* анализа ложных объектов;
+* анализа перепутанных классов;
+* анализа корректных и ошибочных пикселей.
+
+---
+
+# 43. `mmseg/datasets/cats_dogs_dataset.py`
+
+Собственная реализация датасета для задачи сегментации кошек и собак.
+
+Файл интегрирует используемый датасет непосредственно в MMSegmentation и позволяет использовать стандартный pipeline фреймворка:
+
+```text
+Dataset
+↓
+DataLoader
+↓
+Model
+↓
+Runner
+↓
+Validation / Test
+```
+
+---
+
+# 44. Конфигурации датасетов
+
+Каталог:
+
+```text
+configs/_base_/datasets/
+```
+
+Содержит:
+
+### `cats_dogs.py`
+
+Базовая конфигурация датасета.
+
+### `cats_dogs_aug.py`
+
+Конфигурация с аугментациями.
+
+### `cats_dogs_no_aug.py`
+
+Конфигурация без аугментаций.
+
+---
+
+# 45. Конфигурации расписаний
+
+Каталог:
+
+```text
+configs/_base_/schedules/
+```
+
+Содержит:
+
+### `cats_dogs_schedule.py`
+
+Основное расписание обучения.
+
+### `cats_dogs_finetune_schedule.py`
+
+Расписание для fine-tuning предварительно обученной модели.
+
+---
+
+# 46. Конфигурации экспериментов
+
+Каталог:
+
+```text
+configs/cats_dogs/
+```
+
+### `unet_fcn_no_aug.py`
+
+U-Net + FCN без аугментаций.
+
+### `unet_pspnet_no_aug.py`
+
+U-Net + PSPNet без аугментаций.
+
+### `unet_fcn_aug.py`
+
+U-Net + FCN с аугментациями.
+
+### `unet_pspnet_aug.py`
+
+U-Net + PSPNet с усиленными аугментациями.
+
+### `unet_pspnet_aug_exp2.py`
+
+U-Net + PSPNet с аугментациями и изменёнными гиперпараметрами.
+
+### `hrnet_fcn_finetune.py`
+
+HRNet-W18 с pretrained-весами и fine-tuning.
+
+---
+
+# 47. Данные
+
+## `data/raw_dataset/`
+
+Исходный датасет:
+
+```text
+train
+val
+test
+```
+
+---
+
+## `data/correct_mask/`
+
+Исправленные цветные маски после работы с CVAT.
+
+---
+
+## `data/correct_mask_indexed/`
+
+Индексированные маски для обучения:
+
+```text
+0 — background
+1 — cat
+2 — dog
+```
+
+---
+
+## `data/bad_masks/`
+
+Визуализации наиболее проблемных исходных масок.
+
+В первую очередь здесь находятся 18 проблемных изображений `train` и их сравнения до/после исправления.
+
+---
+
+## `data/mask_overlays/`
+
+Визуализации исходных изображений с наложенными сегментационными масками.
+
+Используются для визуального контроля качества датасета.
+
+---
+
+# 48. Результаты экспериментов
+
+## `artifacts/`
+
+Каталог содержит промежуточные и итоговые результаты.
+
+---
+
+## `artifacts/cvat_annotations/`
+
+Архивы разметки:
+
+```text
+train_annotations.zip
+val_annotations.zip
+test_annotations.zip
+```
+
+Использовались для работы с CVAT.
+
+---
+
+## `artifacts/stage_2/`
+
+Результаты baseline:
+
+```text
+unet_fcn_no_aug
+unet_pspnet_no_aug
+```
+
+---
+
+## `artifacts/stage_3/`
+
+Результаты экспериментов по улучшению:
+
+```text
+unet_pspnet_aug
+unet_pspnet_aug_exp2
+hrnet_w18_finetune
+```
+
+Лучший результат получен в:
+
+```text
+hrnet_w18_finetune
+```
+
+---
+
+# 49. Jupyter Notebook
+
+Jupyter Notebook проекта является центральным исследовательским журналом.
+
+В нём последовательно зафиксированы все этапы работы.
+
+## Этап 0
+
+* импорт библиотек;
+* настройка окружения;
+* проверка версий;
+* фиксация seed;
+* настройка конфигурации проекта.
+
+## Этап 1
+
+* визуальная проверка масок;
+* поиск проблемной разметки;
+* сохранение плохих масок;
+* подготовка архивов CVAT;
+* исправление разметки;
+* преобразование масок;
+* EDA;
+* баланс классов;
+* размеры изображений;
+* размеры объектов;
+* проверка качества данных;
+* визуализация.
+
+## Этап 2
+
+Для каждого baseline последовательно выполняются:
+
+```text
+Config
+↓
+Dataset
+↓
+DataLoader
+↓
+Batch
+↓
+Model
+↓
+Forward
+↓
+Runner
+↓
+GPU
+↓
+Training
+↓
+Log
+↓
+Checkpoint
+↓
+Test
+```
+
+Это выполнено для:
+
+```text
+U-Net + FCN
+U-Net + PSPNet
+```
+
+## Этап 3
+
+Аналогичный полный pipeline выполнен для:
+
+```text
+U-Net + PSPNet + аугментации
+U-Net + PSPNet + изменённые гиперпараметры
+HRNet-W18 + pretrained + fine-tuning
+```
+
+Для каждого эксперимента в Notebook зафиксированы:
+
+* конфигурация;
+* параметры модели;
+* параметры обучения;
+* проверка DataLoader;
+* проверка forward;
+* проверка GPU;
+* запуск обучения;
+* поиск результата;
+* чтение логов;
+* графики;
+* поиск лучшего checkpoint;
+* тестирование;
+* метрики.
+
+## Этап 4
+
+Для лучшего checkpoint:
+
+```text
+best_mDice_epoch_50.pth
+```
+
+выполнены:
+
+* независимый test;
+* сохранение Prediction;
+* расчёт Dice;
+* поиск лучших Prediction;
+* поиск худших Prediction;
+* визуальное сравнение;
+* анализ типов ошибок;
+* формирование итоговых выводов.
+
+Таким образом, Notebook содержит не только финальные цифры, но и **полный ход экспериментов и анализа статистики проекта**.
+
+---
+
+# 50. Воспроизводимость
+
+Для обеспечения воспроизводимости:
+
+* используется центральная конфигурация проекта;
+* параметры экспериментов фиксируются в конфигурационных файлах;
+* результаты каждого запуска сохраняются в отдельной директории;
+* checkpoints сохраняются вместе с результатами эксперимента;
+* логи обучения сохраняются локально;
+* используются фиксируемые random seeds;
+* для анализа применяются отдельные Python-модули;
+* последовательность всех основных действий зафиксирована в Jupyter Notebook.
+
+---
+
+# 51. Итоговый результат
+
+В проекте были исследованы следующие варианты:
+
+```text
+U-Net + FCN
+        ↓
+U-Net + PSPNet
+        ↓
+U-Net + PSPNet + аугментации
+        ↓
+U-Net + PSPNet + изменение гиперпараметров
+        ↓
+HRNet-W18 + pretrained + fine-tuning
+```
+
+Получена следующая динамика основной метрики:
+
+```text
+U-Net + PSPNet baseline
+62.05%
+
+        ↓ +7.04 п.п.
+
+U-Net + PSPNet + augmentation
+69.09%
+
+        ↓
+
+U-Net + PSPNet + changed hyperparameters
+66.02%
+
+        ↓ +16.15 п.п.
+
+HRNet-W18 + pretrained + fine-tuning
+82.17%
+```
+
+Итоговый прирост относительно исходного baseline:
+
+> **+20.12 процентного пункта mDice**
+
+Целевой показатель:
+
+> **mDice > 75%**
+
+Полученный показатель:
+
+> **mDice = 82.17%**
+
+### **Цель проекта выполнена.**
+
+---
+
+# 52. Основные выводы
+
+1. Исходный датасет требовал обязательной проверки и исправления разметки.
+2. Один дублирующийся пример был удалён.
+3. Все изображения и маски были проверены.
+4. 18 наиболее проблемных train-изображений были дополнительно перерazмечены.
+5. Все рабочие маски приведены к единому индексированному формату `0/1/2`.
+6. EDA выявил сильный дисбаланс между `background`, `cat` и `dog`.
+7. Для данной задачи mDice является более информативной метрикой, чем только pixel accuracy.
+8. U-Net + PSPNet показал немного лучший результат на validation относительно U-Net + FCN, однако на test разница оказалась минимальной.
+9. Усиленные аугментации увеличили test mDice с `62.05%` до `69.09%`.
+10. Простое уменьшение learning rate не дало дополнительного прироста.
+11. Наиболее существенный результат получен при переходе на HRNet-W18 с pretrained-весами и fine-tuning.
+12. Финальный test mDice составил **82.17%**.
+13. Целевой показатель `mDice > 75%` выполнен.
+14. Анализ ошибок показал, что основные оставшиеся проблемы связаны с перепутыванием `cat/dog`, небольшими объектами и неточностью границ.
+15. Наиболее перспективные направления дальнейшего улучшения — расширение датасета, hard examples, повышение разрешения и исследование loss-функций.
+
+---
+
+# 53. Итоговая конфигурация лучшей модели
+
+```text
+Architecture:
+    HRNet-W18
+
+Initialization:
+    Pretrained weights
+
+Training strategy:
+    Fine-tuning
+
+Input:
+    256 × 256
+
+Classes:
+    3
+
+Classes:
+    background
+    cat
+    dog
+
+Decode head:
+    FCN
+
+Loss:
+    Cross Entropy Loss
+    +
+    Dice Loss
+
+Augmentations:
+    PhotoMetricDistortion
+    RandomRotate
+    RandomCutOut
+    GridDistortion
+
+Best checkpoint:
+    best_mDice_epoch_50.pth
+
+Best epoch:
+    50
+
+Validation mDice:
+    82.48%
+
+Test mDice:
+    82.17%
+
+Test mIoU:
+    71.76%
+
+Test mAcc:
+    81.52%
+
+Test aAcc:
+    96.09%
+```
+
+---
+
+# 54. Итог
+
+Проект представляет полный pipeline разработки модели семантической сегментации — от проверки и исправления исходной разметки до обучения нескольких архитектур, контролируемых экспериментов, независимого тестирования и анализа ошибок.
+
+Основной практический результат — переход от baseline **U-Net + PSPNet с Test mDice 62.05%** к **HRNet-W18 с pretrained-весами и fine-tuning с Test mDice 82.17%**.
+
+Полученная модель превышает установленный в задании порог `75%` и демонстрирует существенное улучшение качества сегментации на независимой тестовой выборке.
+
+Все основные этапы, запуски, параметры, промежуточные проверки, статистика, визуализации, метрики, checkpoints, анализ предсказаний и итоговые выводы зафиксированы в Jupyter Notebook проекта, а собственный код, конфигурации, данные и результаты разделены по соответствующим каталогам репозитория.
